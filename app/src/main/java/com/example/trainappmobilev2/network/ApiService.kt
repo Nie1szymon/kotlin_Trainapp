@@ -20,4 +20,8 @@ interface ApiService {
 
     @GET("plans/")
     fun getPlans(@Header("Authorization") token: String): Call<List<Plan>>
+
+    @POST("user/plans/")
+    fun addUserPlan(@Header("Authorization") token: String, @Body plan: Plan): Call<Plan>
+
 }
