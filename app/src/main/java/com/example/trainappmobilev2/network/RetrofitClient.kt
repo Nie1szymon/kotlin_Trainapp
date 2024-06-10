@@ -1,11 +1,9 @@
 package com.example.trainappmobilev2.network
 
-
 import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -33,14 +31,13 @@ object RetrofitClient {
         }
     }
 
-    // Add logging
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
     private val okHttpClient = OkHttpClient.Builder()
         .cookieJar(cookieJar)
-        .addInterceptor(loggingInterceptor) // Add logging
+        .addInterceptor(loggingInterceptor)
         .addInterceptor { chain ->
             val originalRequest = chain.request()
             val newRequest = originalRequest.newBuilder().apply {
@@ -58,35 +55,11 @@ object RetrofitClient {
     val instance: ApiService by lazy {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(ScalarsConverterFactory.create()) // Add text converter
+            .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(okHttpClient)
             .build()
 
         retrofit.create(ApiService::class.java)
-    }
-
-    @Throws(IOException::class)
-    fun fetchCsrfToken() {
-        val request = Request.Builder()
-            .url("${BASE_URL}api/auth/csrf/")
-            .build()
-
-        okHttpClient.newCall(request).execute().use { response ->
-            if (response.isSuccessful) {
-                val responseBody = response.body?.string() ?: ""
-                println("CSRF Response: $responseBody")
-                // Check if response is a string (error message)
-                if (!responseBody.startsWith("{")) {
-                    // Handle string response (e.g., display error message)
-                    println("Login Failed: $responseBody")
-                } else {
-                    // Parse JSON object if it's valid (unlikely in this case)
-                    // ...
-                }
-            } else {
-                println("CSRF Token Fetch Failed: ${response.code}")
-            }
-        }
     }
 }
