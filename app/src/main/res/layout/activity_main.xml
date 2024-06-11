@@ -10,8 +10,19 @@
         android:id="@+id/plansButton"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
         android:background="?attr/selectableItemBackground"
         android:text="Plans to buy"
-        android:layout_centerInParent="true" />
+        tools:ignore="DuplicateClickableBoundsCheck" />
+
+    <Button
+        android:id="@+id/userPlansButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/plansButton"
+        android:layout_centerHorizontal="true"
+        android:background="?attr/selectableItemBackground"
+        android:text="Your Plans" />
 
 </RelativeLayout>
