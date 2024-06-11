@@ -11,6 +11,7 @@ import com.example.trainappmobilev2.MainActivity
 import com.example.trainappmobilev2.R
 import com.example.trainappmobilev2.model.TrainingsExercises
 import com.example.trainappmobilev2.network.RetrofitClient
+import com.example.trainappmobilev2.ExercisesPagerAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
