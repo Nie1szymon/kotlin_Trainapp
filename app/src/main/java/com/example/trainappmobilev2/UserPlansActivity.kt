@@ -64,9 +64,7 @@ class UserPlansActivity : AppCompatActivity() {
     }
 
     private fun goToTrainings(plan: Plan) {
-        // Implement the logic to go to the trainings
-        // For example, you could start a new activity
-        val intent = Intent(this, TrainingsActivity::class.java)
+        val intent = Intent(this, TrainingActivity::class.java)
         intent.putExtra("PLAN_ID", plan.id)
         startActivity(intent)
     }
