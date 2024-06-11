@@ -39,9 +39,8 @@
         android:text="Owner" />
 
     <Button
-        android:id="@+id/addButton"
+        android:id="@+id/actionButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add to My Plans" />
-
+        android:text="Action" />
 </LinearLayout>

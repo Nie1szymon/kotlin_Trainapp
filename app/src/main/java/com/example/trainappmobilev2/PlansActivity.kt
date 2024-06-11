@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trainappmobilev2.R
+import com.example.trainappmobilev2.model.AddUserPlanRequest
 import com.example.trainappmobilev2.model.Plan
 import com.example.trainappmobilev2.network.RetrofitClient
 import retrofit2.Call
@@ -24,7 +25,7 @@ class PlansActivity : AppCompatActivity() {
 
         plansRecyclerView = findViewById(R.id.plansRecyclerView)
         plansRecyclerView.layoutManager = LinearLayoutManager(this)
-        plansAdapter = PlansAdapter { plan -> addUserPlan(plan) }
+        plansAdapter = PlansAdapter({ plan -> addUserPlan(plan) }, "Add to My Plans")
         plansRecyclerView.adapter = plansAdapter
 
         val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
@@ -68,7 +69,8 @@ class PlansActivity : AppCompatActivity() {
 
         if (token != null) {
             val apiService = RetrofitClient.instance
-            apiService.addUserPlan("Bearer $token", plan).enqueue(object : Callback<Plan> {
+            val request = AddUserPlanRequest(plan.id)
+            apiService.addUserPlan("Bearer $token", request).enqueue(object : Callback<Plan> {
                 override fun onResponse(call: Call<Plan>, response: Response<Plan>) {
                     if (response.isSuccessful) {
                         Toast.makeText(this@PlansActivity, "Plan added to your plans", Toast.LENGTH_SHORT).show()

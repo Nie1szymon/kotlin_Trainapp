@@ -1,5 +1,6 @@
 package com.example.trainappmobilev2
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -24,7 +25,7 @@ class UserPlansActivity : AppCompatActivity() {
 
         userPlansRecyclerView = findViewById(R.id.userPlansRecyclerView)
         userPlansRecyclerView.layoutManager = LinearLayoutManager(this)
-        userPlansAdapter = PlansAdapter { plan -> addUserPlan(plan) }
+        userPlansAdapter = PlansAdapter({ plan -> goToTrainings(plan) }, "Go to the Trainings")
         userPlansRecyclerView.adapter = userPlansAdapter
 
         val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
@@ -62,31 +63,11 @@ class UserPlansActivity : AppCompatActivity() {
         })
     }
 
-    private fun addUserPlan(plan: Plan) {
-        val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
-        val token = sharedPreferences.getString("access_token", null)
-
-        if (token != null) {
-            val apiService = RetrofitClient.instance
-            apiService.addUserPlan("Bearer $token", plan).enqueue(object : Callback<Plan> {
-                override fun onResponse(call: Call<Plan>, response: Response<Plan>) {
-                    if (response.isSuccessful) {
-                        Toast.makeText(this@UserPlansActivity, "Plan added to your plans", Toast.LENGTH_SHORT).show()
-                        // Optional: refresh the list
-                        fetchUserPlans(token)
-                    } else {
-                        Log.e("UserPlansActivity", "Error: ${response.errorBody()?.string()}")
-                        Toast.makeText(this@UserPlansActivity, "Failed to add plan", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onFailure(call: Call<Plan>, t: Throwable) {
-                    Log.e("UserPlansActivity", "Network error", t)
-                    Toast.makeText(this@UserPlansActivity, "Network error", Toast.LENGTH_SHORT).show()
-                }
-            })
-        } else {
-            Toast.makeText(this, "No token found, please login", Toast.LENGTH_SHORT).show()
-        }
+    private fun goToTrainings(plan: Plan) {
+        // Implement the logic to go to the trainings
+        // For example, you could start a new activity
+        val intent = Intent(this, TrainingsActivity::class.java)
+        intent.putExtra("PLAN_ID", plan.id)
+        startActivity(intent)
     }
 }

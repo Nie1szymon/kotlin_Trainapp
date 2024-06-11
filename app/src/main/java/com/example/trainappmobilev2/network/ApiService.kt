@@ -1,5 +1,6 @@
 package com.example.trainappmobilev2.network
 
+import com.example.trainappmobilev2.model.AddUserPlanRequest
 import com.example.trainappmobilev2.model.LoginRequest
 import com.example.trainappmobilev2.model.LoginResponse
 import com.example.trainappmobilev2.model.Plan
@@ -22,8 +23,7 @@ interface ApiService {
     fun getPlans(@Header("Authorization") token: String): Call<List<Plan>>
 
     @POST("user/plans/")
-    fun addUserPlan(@Header("Authorization") token: String, @Body plan: Plan): Call<Plan>
-
+    fun addUserPlan(@Header("Authorization") token: String, @Body request: AddUserPlanRequest): Call<Plan>
     @GET("user/plans/")
     fun getUserPlans(@Header("Authorization") token: String): Call<List<Plan>>
 
