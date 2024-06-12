@@ -12,7 +12,7 @@ import com.google.gson.GsonBuilder
 import java.io.IOException
 
 object RetrofitClient {
-    private const val BASE_URL = "http://192.168.0.130:8000/"
+    private const val BASE_URL = "http://192.168.249.71:8000/"
     private var csrfToken: String? = null
     private val cookieStore: HashMap<String, List<Cookie>> = HashMap()
 

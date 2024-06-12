@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <Spinner
+        android:id="@+id/spinnerExercises"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/editTextSeries"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Series" />
+
+    <EditText
+        android:id="@+id/editTextRepeat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Repeat"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/buttonAddExercise"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Exercise" />
+</LinearLayout>
+

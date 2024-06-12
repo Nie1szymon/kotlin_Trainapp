@@ -49,6 +49,7 @@ class ExercisesPagerAdapter(private val exercises: List<TrainingsExercises>) :
                 override fun onResponse(call: Call<PixabayImageResponse>, response: Response<PixabayImageResponse>) {
                     if (response.isSuccessful) {
                         val imageUrl = response.body()?.hits?.firstOrNull()?.webformatURL
+                        Log.d("ExerciseViewHolder", "Image URL: $imageUrl")
                         imageUrl?.let {
                             Glide.with(itemView.context)
                                 .load(it)
