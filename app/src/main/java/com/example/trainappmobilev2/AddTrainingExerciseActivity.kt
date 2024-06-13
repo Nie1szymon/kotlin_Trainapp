@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,8 @@ import retrofit2.Response
 class AddTrainingExerciseActivity : AppCompatActivity() {
 
     private lateinit var spinnerExercises: Spinner
+    private lateinit var editTextSeries: EditText
+    private lateinit var editTextRepeat: EditText
     private lateinit var buttonAddExercise: Button
     private var trainingId: Int = -1
     private var exercisesList: List<Exercise> = listOf()
@@ -26,6 +29,8 @@ class AddTrainingExerciseActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_training_exercise)
 
         spinnerExercises = findViewById(R.id.spinnerExercises)
+        editTextSeries = findViewById(R.id.editTextSeries)
+        editTextRepeat = findViewById(R.id.editTextRepeat)
         buttonAddExercise = findViewById(R.id.buttonAddExercise)
 
         trainingId = intent.getIntExtra("TRAINING_ID", -1)
@@ -81,11 +86,14 @@ class AddTrainingExerciseActivity : AppCompatActivity() {
         val token = sharedPreferences.getString("access_token", null)
 
         if (token != null) {
+            val series = editTextSeries.text.toString().toIntOrNull() ?: 0
+            val repeat = editTextRepeat.text.toString().toIntOrNull() ?: 0
+
             val trainingExercise = TrainingExerciseAdd(
                 trainings = trainingId,
                 exercises = selectedExercise.id,
-                series = 0, // Możesz dostosować te wartości w zależności od potrzeb
-                repeat = 0  // Możesz dostosować te wartości w zależności od potrzeb
+                series = series,
+                repeat = repeat
             )
 
             RetrofitClient.instance.addTrainingExercise("Bearer $token", trainingId, trainingExercise).enqueue(object : Callback<TrainingExerciseAdd> {

@@ -9,5 +9,9 @@
         android:id="@+id/trainingsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    <Button
+        android:layout_width="match_parent"
+        android:text="aaaaa"
+        android:layout_height="wrap_content"/>
 </LinearLayout>
 

@@ -80,4 +80,7 @@ interface ApiService {
 
     @GET("exercises/")
     fun getExercises(@Header("Authorization") token: String): Call<List<Exercise>>
+
+    @POST("plans/{plan_id}/trainings/")
+    fun addTraining(@Header("Authorization") token: String, @Path("plan_id") planId: Int, @Body training: Training): Call<Training>
 }

@@ -19,6 +19,7 @@ class EditPlanActivity : AppCompatActivity() {
     private lateinit var editTextPlanPrice: EditText
     private lateinit var buttonSavePlan: Button
     private lateinit var buttonEditTrainings: Button
+    private lateinit var buttonAddTraining: Button
     private var planId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,8 +31,9 @@ class EditPlanActivity : AppCompatActivity() {
         editTextPlanPrice = findViewById(R.id.editTextPlanPrice)
         buttonSavePlan = findViewById(R.id.buttonSavePlan)
         buttonEditTrainings = findViewById(R.id.buttonEditTrainings)
+        buttonAddTraining = findViewById(R.id.buttonAddTraining)
 
-        // Pobierz ID planu z Intent
+        // Get plan ID from Intent
         planId = intent.getIntExtra("PLAN_ID", -1)
         if (planId != -1) {
             fetchPlanDetails(planId)
@@ -43,6 +45,12 @@ class EditPlanActivity : AppCompatActivity() {
 
         buttonEditTrainings.setOnClickListener {
             val intent = Intent(this, EditTrainingsActivity::class.java)
+            intent.putExtra("PLAN_ID", planId)
+            startActivity(intent)
+        }
+
+        buttonAddTraining.setOnClickListener {
+            val intent = Intent(this, AddTrainingActivity::class.java)
             intent.putExtra("PLAN_ID", planId)
             startActivity(intent)
         }
@@ -81,7 +89,7 @@ class EditPlanActivity : AppCompatActivity() {
             override fun onResponse(call: Call<Plan>, response: Response<Plan>) {
                 if (response.isSuccessful) {
                     Toast.makeText(this@EditPlanActivity, "Plan updated successfully", Toast.LENGTH_SHORT).show()
-                    setResult(RESULT_OK) // Ustaw wynik, aby poinformować o zakończeniu edycji
+                    setResult(RESULT_OK)
                     finish()
                 } else {
                     Toast.makeText(this@EditPlanActivity, "Failed to update plan", Toast.LENGTH_SHORT).show()
@@ -94,3 +102,4 @@ class EditPlanActivity : AppCompatActivity() {
         })
     }
 }
+

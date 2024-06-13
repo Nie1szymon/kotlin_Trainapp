@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val token = task.result
+
                 Log.d("FCM Token", token)
             } else {
                 Log.w("FCM Token", "Fetching FCM token failed", task.exception)

@@ -1,6 +1,5 @@
 package com.example.trainappmobilev2
 
-
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -12,64 +11,72 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessaging
-//import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import org.json.JSONObject
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
-    companion object{
+    companion object {
         const val TAG = "PUSH_Android"
         private const val CHANNEL_ID = "channel_01"
         private const val CHANNEL_NAME = "Notification Channel"
         private const val NOTIFICATION_ID = 1001
     }
+
     override fun onNewToken(refreshedToken: String) {
         super.onNewToken(refreshedToken)
-        // Get updated InstanceID token.
-        val token = FirebaseMessaging.getInstance().token
         Log.d(TAG, "Refreshed token: $refreshedToken")
-
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // FCM registration token to your app server.
-        //sendRegistrationToServer(token)
+        sendRegistrationToServer(refreshedToken)
     }
 
+    fun forceNewToken() {
+        val newToken = "forced_token_example" // Replace with logic to generate or fetch a new token
+        onNewToken(newToken)
+    }
 
+    private fun sendRegistrationToServer(token: String) {
+        val url = "http://192.168.249.71:8000/register_device/"
+        val json = JSONObject()
+        json.put("token", token)
+
+        val requestBody = RequestBody.create("application/json; charset=utf-8".toMediaTypeOrNull(), json.toString())
+        val request = Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .build()
+
+        val client = OkHttpClient()
+        client.newCall(request).enqueue(object : okhttp3.Callback {
+            override fun onFailure(call: okhttp3.Call, e: java.io.IOException) {
+                Log.e(TAG, "Failed to register token: ${e.message}")
+            }
+
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                if (response.isSuccessful) {
+                    Log.d(TAG, "Token registered successfully")
+                } else {
+                    Log.e(TAG, "Failed to register token: ${response.message}")
+                }
+            }
+        })
+    }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        // ...
-
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: ${remoteMessage.from}")
 
-        // Check if message contains a data payload.
-        if (remoteMessage.data.isNotEmpty()) {
+        remoteMessage.data.isNotEmpty().let {
             Log.d(TAG, "Message data payload: ${remoteMessage.data}")
-
-            if (/* Check if data needs to be processed by long running job */ true) {
-                // For long-running tasks (10 seconds or more) use WorkManager.
-//                scheduleJob()
-            } else {
-                // Handle message within 10 seconds
-//                handleNow()
-            }
         }
 
-
-
-        // Check if message contains a notification payload.
         remoteMessage.notification?.let {
             Log.d(TAG, "Message Notification Body: ${it.body}")
         }
 
-
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
-
-        super.onMessageReceived(remoteMessage)
         createNotificationChannel()
         showNotification(remoteMessage)
     }
@@ -87,7 +94,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun showNotification(remoteMessage: RemoteMessage) {
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.trainapp) // Musisz mieć zasób ic_notification w res/drawable
+            .setSmallIcon(R.drawable.trainapp)
             .setContentTitle(remoteMessage.notification?.title ?: "Default Title")
             .setContentText(remoteMessage.notification?.body ?: "Default Message")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
